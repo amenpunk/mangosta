@@ -1,16 +1,19 @@
+const mongoose = require('mongoose')
 const {User} = require('../Models/User')
+const {Blog} = require('../Models/Blog')
+
 
 const insert = async (req, res) => {
    
     const {name, lastName, years} = req.body
-    const user = new User({ name, lastName, years, login : new Date()})
+    const user = new User({ _id : new mongoose.Types.ObjectId(),  name, lastName, years, login : new Date()})
     user.save((err, register) => {
         if(err){
-            res.json({status : false})
             console.log(err)
+            return res.json({status : false})
         } 
         console.log(register)
-        res.json({status : true})
+        return res.json({status : true})
     })
 
 } 
@@ -52,6 +55,19 @@ const update = async (req,res) => {
     })
     let register = await updated
     return res.send(register)
-} 
+}
 
-module.exports = { find, insert, update }
+const getBlogs = async (req,res) => {
+    let {uid} = req.body;
+
+    Blog.find()
+   //.findOne({ name : "Ming"})
+   .populate("user") // key to populat
+   .then(user => {
+       console.log(user)
+      return res.json(user); 
+   });
+
+}
+
+module.exports = { find, insert, update, getBlogs }

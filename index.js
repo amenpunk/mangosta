@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const port = process.env.port || 8080;
 const app = express();
 const http = require('http')
